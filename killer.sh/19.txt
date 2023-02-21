@@ -1,0 +1,45 @@
+k create ns secret
+
+cp /opt/course/19/secret1.yaml 19_secret1.yaml
+
+vim 19_secret1.yaml
+
+
+k -n secret create secret generic secret2 --from-literal=user=user1 --from-literal=pass=1234
+
+
+k -n secret run secret-pod --image=busybox:1.31.1 $do -- sh -c "sleep 5d" > 19.yaml
+
+vim 19.yaml
+
+
+
+
+
+k -f 19.yaml create
+
+➜ k -n secret exec secret-pod -- env | grep APP
+APP_PASS=1234
+APP_USER=user1
+
+
+➜ k -n secret exec secret-pod -- find /tmp/secret1
+/tmp/secret1
+/tmp/secret1/..data
+/tmp/secret1/halt
+/tmp/secret1/..2019_12_08_12_15_39.463036797
+/tmp/secret1/..2019_12_08_12_15_39.463036797/halt
+
+
+
+➜ k -n secret exec secret-pod -- cat /tmp/secret1/halt
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          halt
+# Required-Start:
+# Required-Stop:
+# Default-Start:
+# Default-Stop:      0
+# Short-Description: Execute the halt command.
+# Description:
+...

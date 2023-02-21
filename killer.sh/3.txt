@@ -1,0 +1,20 @@
+
+➜ k -n project-c13 get pod | grep o3db
+o3db-0                                  1/1     Running   0          52s
+o3db-1                                  1/1     Running   0          42s
+
+
+➜ k -n project-c13 get deploy,ds,sts | grep o3db
+statefulset.apps/o3db   2/2     2m56s
+
+
+➜ k -n project-c13 get pod --show-labels | grep o3db
+o3db-0                                  1/1     Running   0          3m29s   app=nginx,controller-revision-hash=o3db-5fbd4bb9cc,statefulset.kubernetes.io/pod-name=o3db-0
+o3db-1                                  1/1     Running   0          3m19s   app=nginx,controller-revision-hash=o3db-5fbd4bb9cc,statefulset.kubernetes.io/pod-name=o3db-1
+
+➜ k -n project-c13 scale sts o3db --replicas 1
+statefulset.apps/o3db scaled
+
+➜ k -n project-c13 get sts o3db
+NAME   READY   AGE
+o3db   1/1     4m39s

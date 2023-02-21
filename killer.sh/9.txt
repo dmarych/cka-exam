@@ -1,0 +1,7 @@
+k run manual-schedule --image=httpd:2.4-alpine
+
+k get pod manual-schedule -o yaml > 9.yaml
+
+
+k -f 9.yaml replace --force
+

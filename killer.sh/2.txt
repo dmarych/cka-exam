@@ -1,0 +1,10 @@
+k get node # find controlplane node
+
+k describe node cluster1-controlplane1 | grep Taint -A1 # get controlplane node taints
+
+k get node cluster1-controlplane1 --show-labels # get controlplane node labels
+
+# check the export on the very top of this document so we can use $do
+k run pod1 --image=httpd:2.4.41-alpine $do > 2.yaml
+
+vim 2.yaml

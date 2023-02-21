@@ -1,0 +1,11 @@
+
+k run multi-container-playground --image=nginx:1.17.6-alpine $do > 13.yaml
+
+
+k get pod multi-container-playground
+
+
+
+k exec multi-container-playground -c c1 -- env | grep MY
+
+k logs multi-container-playground -c c3

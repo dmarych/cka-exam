@@ -1,0 +1,25 @@
+k api-resources    # shows all
+
+k api-resources -h # help always good
+
+k api-resources --namespaced -o name > /opt/course/16/resources.txt
+
+
+k -n project-c13 get role --no-headers | wc -l
+No resources found in project-c13 namespace.
+0
+
+➜ k -n project-c14 get role --no-headers | wc -l
+300
+
+➜ k -n project-hamster get role --no-headers | wc -l
+No resources found in project-hamster namespace.
+0
+
+➜ k -n project-snake get role --no-headers | wc -l
+No resources found in project-snake namespace.
+0
+
+➜ k -n project-tiger get role --no-headers | wc -l
+No resources found in project-tiger namespace.
+0

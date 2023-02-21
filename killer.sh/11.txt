@@ -1,0 +1,4 @@
+k -n project-tiger create deployment --image=httpd:2.4-alpine ds-important $do > 11.yaml
+
+k -f 11.yaml create
+

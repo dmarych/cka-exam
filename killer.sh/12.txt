@@ -1,0 +1,10 @@
+k -n project-tiger create deployment \
+  --image=nginx:1.17.6-alpine deploy-important $do > 12.yaml
+
+k -f 12.yaml create
+
+
+
+ k -n project-tiger get deploy -l id=very-important
+
+ k -n project-tiger get pod -o wide -l id=very-important

@@ -1,0 +1,15 @@
+k run ready-if-service-ready --image=nginx:1.16.1-alpine $do > 4_pod1.yaml
+
+vim 4_pod1.yaml
+
+
+k -f 4_pod1.yaml create
+
+
+ k get pod ready-if-service-ready
+
+
+k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
+
+
+k get pod ready-if-service-ready

@@ -1,0 +1,16 @@
+k -n project-hamster create sa processor
+
+k -n project-hamster create role -h # examples
+
+k -n project-hamster create role processor \
+  --verb=create \
+  --resource=secret \
+  --resource=configmap
+
+
+k -n project-hamster create rolebinding -h # examples
+
+
+k -n project-hamster create rolebinding processor \
+  --role processor \
+  --serviceaccount project-hamster:processor

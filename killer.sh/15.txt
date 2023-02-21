@@ -1,0 +1,19 @@
+k -n kube-system get pod -o wide | grep proxy # find pod running on cluster2-node1
+
+k -n kube-system delete pod kube-proxy-z64cg
+
+
+
+sh /opt/course/15/cluster_events.sh
+
+
+➜ ssh cluster2-node1
+
+➜ root@cluster2-node1:~# crictl ps | grep kube-proxy
+1e020b43c4423   36c4ebbc9d979   About an hour ago   Running   kube-proxy     ...
+
+➜ root@cluster2-node1:~# crictl rm 1e020b43c4423
+1e020b43c4423
+
+➜ root@cluster2-node1:~# crictl ps | grep kube-proxy
+0ae4245707910   36c4ebbc9d979   17 seconds ago      Running   kube-proxy     ...     

@@ -1,0 +1,56 @@
+
+
+
+ k get node
+NAME                     STATUS     ROLES           AGE   VERSION
+cluster3-controlplane1   Ready      control-plane   14d   v1.26.0
+cluster3-node1           NotReady   <none>          14d   v1.26.0
+First we check if the kubelet is running:
+
+
+➜ ssh cluster3-node1
+
+➜ root@cluster3-node1:~# ps aux | grep kubelet
+root     29294  0.0  0.2  14856  1016 pts/0    S+   11:30   0:00 grep --color=auto kubelet
+Nope, so we check if it's configured using systemd as service:
+
+
+➜ root@cluster3-node1:~# service kubelet status
+● kubelet.service - kubelet: The Kubernetes Node Agent
+   Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; vendor preset: enabled)
+  Drop-In: /etc/systemd/system/kubelet.service.d
+           └─10-kubeadm.conf
+   Active: inactive (dead) since Sun 2019-12-08 11:30:06 UTC; 50min 52s ago
+...
+
+
+We see it's trying to execute /usr/local/bin/kubelet with some parameters defined in its service config file. A good way to find errors and get more logs is to run the command manually (usually also with its parameters).
+
+
+➜ root@cluster3-node1:~# /usr/local/bin/kubelet
+-bash: /usr/local/bin/kubelet: No such file or directory
+
+➜ root@cluster3-node1:~# whereis kubelet
+kubelet: /usr/bin/kubelet
+Another way would be to see the extended logging of a service like using journalctl -u kubelet.
+
+Well, there we have it, wrong path specified. Correct the path in file /etc/systemd/system/kubelet.service.d/10-kubeadm.conf and run:
+
+
+vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf # fix
+
+systemctl daemon-reload && systemctl restart kubelet
+
+systemctl status kubelet  # should now show running
+Also the node should be available for the api server, give it a bit of time though:
+
+
+➜ k get node
+NAME                     STATUS   ROLES           AGE   VERSION
+cluster3-controlplane1   Ready    control-plane   14d   v1.26.0
+cluster3-node1           Ready    <none>          14d   v1.26.0
+Finally we write the reason into the file:
+
+
+# /opt/course/18/reason.txt
+wrong path to kubelet binary specified in service config
